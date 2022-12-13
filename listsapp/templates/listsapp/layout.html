@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <header class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02">
+        
+        <title>{% block title %}Lists{% endblock %}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="{% static '/listsapp/index.js' %}"></script>
+
+        <h1 class="w-3/12">
+            <a href="{% url 'index' %}">
+              <img viewBox="0 0 248 31" class="h-12 w-auto " src="../static/todo.png"></img>
+            </a>
+        </h1>
+
+        <nav class="nav text-lg">
+              <ul class="flex items-center">
+                    {% if user.is_authenticated %}
+                    <li class="p-4 border-b-2 border-cyan-800 text-black border-opacity-0 hover:border-opacity-100 hover:text-cyan-800 duration-200 cursor-pointer active">
+                        <a  href="{% url 'profile' user.id %}"><strong>{{user.username}}</strong></a>
+                    </li >
+                    {% endif %}
+                    <li class="p-4 border-b-2 border-cyan-800 text-black border-opacity-0 hover:border-opacity-100 hover:text-cyan-800 duration-200 cursor-pointer">
+                        <a  id="following_page" href="{% url 'category' %}">Categories</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="p-4 border-b-2 border-cyan-800 text-black border-opacity-0 hover:border-opacity-100 hover:text-cyan-800 duration-200 cursor-pointer ">
+                        <a id="following_page" href="{% url 'follow_view' %}">Followed Lists</a>
+                    </li>
+                    {% endif %}
+              </ul>
+        </nav>
+
+        <div class="w-3/12 flex justify-end">
+            {% if user.is_authenticated %}
+            <div class="p-4 border-b-2 border-cyan-800 text-black border-opacity-0 hover:border-opacity-100 hover:text-cyan-800 duration-200 cursor-pointer " >
+                <a href="{% url 'logout' %}">Log Out</a>
+            </div>
+            {% else %}
+            <div class="p-4 border-b-2 border-cyan-800 text-black border-opacity-0 hover:border-opacity-100 hover:text-cyan-800 duration-200 cursor-pointer ">
+                <a  href="{% url 'login' %}">Log In</a>
+            </div >
+            <div class="p-4 border-b-2 border-cyan-800 text-black border-opacity-0 hover:border-opacity-100 hover:text-cyan-800 duration-200 cursor-pointer ">
+                <a href="{% url 'register' %}">Register</a>
+            </div>
+            {% endif %}
+        </div>
+
+    </header>
+    <body class="bg-blue-50">
+            {% block body %}
+            {% endblock %}
+    </body>
+</html>

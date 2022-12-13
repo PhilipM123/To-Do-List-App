@@ -1,0 +1,69 @@
+{% extends "listsapp/layout.html" %}
+
+{% block body %}
+<div class="flex items-center justify-center m-5">
+    <h1 class="font-semibold block text-5xl text-gray-500 mb-4">{{title}}</h1>
+</div>
+
+<div class="flex-col flex items-center justify-center">
+{% for list in lists %}
+    {% if list.public == True or request.user.username in list.creator.username %}
+        <div class="shadow-xl w-4/12 shadow-md rounded px-8 pt-6 pb-8 mb-4 bg-white grid-cols-8">
+            <h3 class="font-semibold block text-2xl text-black mb-4 col-span-4">{{list.title}}</h3>
+            <div class="flex justify-between">
+                <p class="font-semibold block text-sm text-gray-500  ">User:  <a href="{% url 'profile' list.creator.id %}">{{list.creator.username}}</a></p>
+                <h6 class="font-semibold block text-sm text-gray-500">Time: {{list.timestamp}}</h6>
+            </div>
+            <ul class="flex flex-col bg-white p-4">
+                {% for listitem in list.listitems.all %}
+                <div class="select-none cursor-pointer border-t-2 border-gray border-opacity-0  bg-white mb-1 rounded-md p-2 transition duration-500 ease-in-out hover:-translate-y-1 hover:shadow-lg hover:border-opacity-100">
+                    {% if request.user.is_authenticated and request.user.username in list.creator.username %}
+                    <form class=" flex" method="PUT">{% csrf_token %}
+                        <input type="checkbox" name="checkboxComplete" class=" mr-4">
+                        <h6 class="font-semibold block text-s text-black ">{{listitem.content}}</h6>        
+                        <input  type="hidden" value="{{listitem.id}}" name="completeListItemId">
+                    </form>
+                    {%else%}
+                    <li class="font-semibold block text-s text-black">{{listitem.content}}</li>
+                    {%endif%}
+                </div>
+                {%endfor%}
+            </ul>
+        {% if request.user.is_authenticated and request.user.username in list.creator.username %}
+            <div class="grid-cols-9 flex">
+                <form class="col-span-3" name="deleteListForm" method="POST" class="listitem">
+                    {% csrf_token %}
+                    <input class="inline-block px-6 py-2.5 bg-blue-600 text-white text-l mr-2 font-bold leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit" value="Delete List" />
+                    <input type="hidden" value="{{list.id}}" name="deleteListId">
+                </form>
+                <form class="col-span-3" name="editListForm" method="POST" action="{% url 'edit_list' list.id %}" class="listitem">
+                    {% csrf_token %}
+                    <input class="inline-block px-6 py-2.5 bg-blue-600 text-white text-l font-bold leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit" value="Edit List" />
+                </form>
+            </div>
+        {%endif%}
+        {% if request.user.is_authenticated and request.user.username not in list.creator.username %}
+            <form name="followListForm" method="POST" class="listitem">
+                {% csrf_token %}
+                <input class="inline-block px-6 py-2.5 bg-blue-600 text-white text-l font-bold leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit" value="Follow List" name="followBtn" />
+                <input type="hidden" value="{{list.id}}" name="followListId">
+            </form>
+        {%endif%}
+        </div>
+    {% endif %}
+{%endfor%}
+</div>
+
+<nav class="paginator" style="text-align: center;">
+    <ul class="pagination">
+        {% if lists.has_next %}
+            <li class="page_item"><a href="?page={{ lists.next_page_number }}">next</a></li>
+        {%endif%}
+        {% if lists.has_previous %}
+            <li class="page_item"><a href="?page=1">&laquo; first   /   </a></li>
+            <li class="page_item"><a href="?page={{ lists.previous_page_number }}">   previous</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

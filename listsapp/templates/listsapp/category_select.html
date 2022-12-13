@@ -1,0 +1,22 @@
+{% extends "listsapp/layout.html" %}
+
+{% block body %}
+
+<div class="flex items-center justify-center m-5">
+    <h1 class="font-semibold block text-5xl text-gray-500 mb-4">Categories</h1>
+</div>
+
+
+<div class="grid h-full place-items-center justify-center">
+    <div class="w-4/5 flex flex-wrap gap-2 ">
+        {% for title in array %}
+        <form class="border-t-2 border-gray border-opacity-0 rounded-md select-none cursor-pointer shadow-xl w-64 px-6 pt-6 pb-6 m-10 bg-white text-center block text-2xl text-black transition duration-500 ease-in-out hover:-translate-y-1 hover:shadow-lg hover:border-opacity-100" method="POST" action="{% url 'category_individual' title %}">
+            {% csrf_token %}
+            <input class="select-none cursor-pointer" name="catTitle" type="submit" value="{{title}}">
+        </form>
+        {%endfor%}
+    </div>
+</div>
+
+
+{% endblock %}

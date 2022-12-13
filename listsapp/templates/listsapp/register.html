@@ -1,0 +1,37 @@
+{% extends "listsapp/layout.html" %}
+
+{% block body %}
+<div class="flex items-center justify-center m-5">
+    <h2 class="font-semibold block text-5xl text-gray-500 mb-4">Register</h2>
+</div>
+    
+
+{% if message %}
+    <div class="font-semibold block text-5xl text-gray-500 mb-4">{{ message }}</div>
+{% endif %}
+<div class="flex-col flex items-center justify-center">
+    <form action="{% url 'register' %}" method="post" class="shadow-xl w-1/4 shadow-md rounded px-8 pt-6 pb-8 mb-4 bg-white">
+        {% csrf_token %}
+        <div class="mb-3 mt-3 flex justify-between ">
+            <label class=" block text-l font-semibold text-black  mt-2" for="title" >Username: </label>
+            <input class="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline col-span-5 autofocus mb-5" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="mb-3 mt-3 flex justify-between ">
+            <label class=" block text-l font-semibold text-black  mt-2" for="title" >Email: </label>
+            <input class="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline col-span-5 autofocus mb-5" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="mb-3 mt-3 flex justify-between ">
+            <label class=" block text-l font-semibold text-black  mt-2" for="title" >Password: </label>
+            <input class="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline col-span-5 autofocus mb-5" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="mb-3 mt-3 flex justify-between ">
+            <label class=" block text-l font-semibold text-black  mt-2" for="title" >Confirm Password: </label>
+            <input class="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline col-span-5 autofocus mb-5" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+
+        <input class="inline-block px-6 py-2.5 bg-blue-600 text-white text-l mr-2 font-bold leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit" value="Register">
+    </form>
+    <p class=" block text-l text-black  mt-2">Already have an account? <a href="{% url 'login' %}" class="font-semibold">Login here.</a></p>
+</div>
+
+{% endblock %}
